@@ -1,9 +1,16 @@
 # OpenDM40-Chinese
 
 [opendm40](https://github.com/opendm40/opendm40) 开源万用表固件的**简体中文汉化**，
-面向正点原子 **DM40A / DM40B / DM40C**，基于 **v0.4.0** 源码。
+面向正点原子 **DM40A / DM40B / DM40C**。
 
-已在 **DM40A 真机**上测试通过。
+两条版本线都在这个仓库里：
+
+| 线 | 基于上游 | 固件 | 状态 |
+|---|---|---|---|
+| **v0.4.1（当前）** | v0.4.1 | `opendm40-v0.4.1-zh.bin` — 634,240 字节，CRC-32 `09785939` | 作者机器上日常在用；完整回归未做完（见[已知问题](#已知问题)）|
+| v0.4.0（上一版） | v0.4.0 | `opendm40-v0.4.0-zh.bin` — 632,576 字节，CRC-32 `fd8d01b6` | 稳定版，可随时回退 |
+
+两条线都已在 **DM40A 真机**上测试通过。
 
 > opendm40 官方只有英文界面。本项目把主菜单、设置页、量程页等改为中文，
 > 并提供一份完整的中文使用说明书。
@@ -38,12 +45,16 @@
 
 ## 要刷的文件
 
-> **直接下载（推荐）**：[Releases · v0.4.0-zh10](
-> https://github.com/xingyan4117-sketch/OpenDM40-Chinese/releases/latest)
-> —— 附件里就是 `opendm40-v0.4.0-zh.bin` 和 `SHA256SUMS.txt`
+> **下载**：直接取仓库里的
+> [firmware/opendm40-v0.4.1-zh.bin](firmware/opendm40-v0.4.1-zh.bin)。
+> [Releases](https://github.com/xingyan4117-sketch/OpenDM40-Chinese/releases) 里的附件
+> 目前还是上一版 `v0.4.0-zh10`（即 `opendm40-v0.4.0-zh.bin`）。
 
-**`firmware/opendm40-v0.4.0-zh.bin`** —— 632576 字节，
-CRC-32 `fd8d01b6`，SHA-256 `b2ce5084…b763`
+**`firmware/opendm40-v0.4.1-zh.bin`** —— 634,240 字节，
+CRC-32 `09785939`，SHA-256 `455e0a4a…e8974ed7`
+
+想回退上一版就刷 `firmware/opendm40-v0.4.0-zh.bin` —— 632,576 字节，
+CRC-32 `fd8d01b6`，SHA-256 `b2ce5084…b763`。
 
 校验：`sha256sum -c SHA256SUMS.txt`（Windows 用 `Get-FileHash` 逐个比对），
 完整清单见仓库根的 `SHA256SUMS.txt`。
@@ -63,7 +74,8 @@ CRC-32 `fd8d01b6`，SHA-256 `b2ce5084…b763`
 | zh7 | `fe7d08de` | 按内阻压降判定，但拔线偶尔还闪 |
 | zh8 | `6803c2d3` | v0.3.0 汉化最终版 |
 | zh9 | `12200498` | 移植到上游 v0.4.0（四通道示波器、协议解码器）|
-| **zh10** | `fd8d01b6` | **当前版本**：示波器五页全汉化、弹窗满宽、触发页两行布局 |
+| zh10 | `fd8d01b6` | v0.4.0 最终版：示波器五页全汉化、弹窗满宽、触发页两行布局 |
+| **zh11** | `09785939` | **当前版本**：移植到上游 v0.4.1（六标签设置、9 档关机、暗屏方式、图库多选批量删除）|
 
 > 从 zh3 起，**发布过的附件不再覆盖**；有新改动就发新 tag。
 
@@ -120,7 +132,8 @@ CRC-32 `fd8d01b6`，SHA-256 `b2ce5084…b763`
 
 - **主菜单**全部 6 项：图库 截图记录 / 万用表 / 示波器 / 信号源 / 设置 /
   组合视图 万用表+示波器
-- **设置页**（单页滚动，24 项）：全部行标签 + 选项值
+- **设置页**：v0.4.0 是单页滚动 **24 项**；v0.4.1 是**六个标签**
+  （显示 / 告警 / 电源 / 万用表 / 示波器 / 其他），两种布局的行标签与选项值都是中文
   （暗屏时间 5分 / 电源方式 自动 (按视图) / 显示行 柱状图 / U盘 只读 …）
 - **量程页**：电压设置 / 电流设置 / 电阻设置 / **电容设置** / **二极管** /
   **频率/温度** / **功率设置**，自动+ 更安全：不降到 mV / 保持限值 / 波形 /
@@ -173,7 +186,13 @@ CRC-32 `fd8d01b6`，SHA-256 `b2ce5084…b763`
 | **示波器 20 个测量缩写** | `Vp-p` `Vrms` `Freq` … 格子只有 55 px，中文放不下 |
 | **刷机后偶发不重新枚举 USB** | 拔插一次即可恢复；**不是固件复位**——表仍在运行，`DBG:BOOT?` 的加载器标记有效、崩溃计数为 0 |
 | **闪存余量见底** | B 区（零等待）已贴着下限、A2 区只剩零头，只有 C 区（慢速 flash）还剩几 KB。再加中文前要先腾空间——把冷字库/冷代码挪到 A2 或 C 区。具体余量看自己构建时 `build.sh` 打印的 `region … free` |
-| **未实机验证** | 功率计接线弹窗、关机确认弹窗、8 条报警提示、U 盘重插刷新——代码已改，但这几种状态不好复现 |
+| **未完整回归** | 校准源精度、蓝牙配对、USB 文件写入、全部触发/量程组合——都要外设或标准源才能测。v0.4.1 上：功率计接线弹窗、图库多选批量删除、记录页、限值页已实测 |
+
+> 两个版本的行为差别：**v0.4.1** 设置页是六个标签、关机 **9 档**
+> （10分 / 30分 / 1小时 / 2小时 / 4小时 / 8小时 / 12小时 / 24小时 / 从不），
+> 并多一档**暗屏方式**——`变暗` = 5% 背光常亮，`全灭` = 先 5% 暗 10 秒再背光归零，
+> 触摸或按键先唤醒（第一次输入只唤醒，不执行）；
+> **v0.4.0** 是单页滚动 24 项、关机 15 档、没有「暗屏方式」。
 
 > 曾经记过的两条「缺陷」已经撤销：查看器正文不渲染、图库对话框收不到点击。
 > 2026-11-01 复测都正常，是当时拍照/操作的时机问题。
@@ -184,14 +203,15 @@ CRC-32 `fd8d01b6`，SHA-256 `b2ce5084…b763`
 
 ### 刷哪一个文件？
 
-> ## 就刷：`firmware/opendm40-v0.4.0-zh.bin`
-> **632576 字节**，CRC-32 `fd8d01b6`，SHA-256 开头 `b2ce5084`
+> ## 就刷：`firmware/opendm40-v0.4.1-zh.bin`
+> **634,240 字节**，CRC-32 `09785939`，SHA-256 开头 `455e0a4a`
 
-仓库里一共 4 个固件镜像（外加一个构建用的链接脚本），**只刷第一个**：
+仓库里一共 5 个固件镜像（外加一个构建用的链接脚本），**只刷第一个**：
 
 | 文件 | 是什么 | 刷吗 |
 |---|---|---|
-| **`firmware/opendm40-v0.4.0-zh.bin`** | **汉化版（本项目的成品）** | ✅ **刷这个** |
+| **`firmware/opendm40-v0.4.1-zh.bin`** | **当前汉化版（基于上游 v0.4.1）** | ✅ **刷这个** |
+| `firmware/opendm40-v0.4.0-zh.bin` | 上一版汉化（基于 v0.4.0，单页 24 项设置） | 想回退上一版时用 |
 | `firmware/opendm40-v0.3.0-zh.bin` | 旧的 v0.3.0 汉化版（仅存档） | ❌ 只有想回退旧版才用 |
 | `firmware/opendm40-v0.3.0-official.bin` | 上游 opendm40 v0.3.0 原版，**英文界面** | ❌ 只有想回退英文版才用 |
 | `firmware/dm40_v_2_6-stock.bin` | **原厂 V2.6** 固件备份 | ❌ 只有想刷回出厂才用 |
@@ -231,13 +251,13 @@ Update-HostStorageCache
 ### 步骤
 
 1. **USB 线连电脑**，表会挂成一个 U 盘（卷标 `DM40`，约 2 GB）
-2. **把 `firmware/opendm40-v0.4.0-zh.bin` 复制到 U 盘根目录**，
+2. **把 `firmware/opendm40-v0.4.1-zh.bin` 复制到 U 盘根目录**，
    文件名随便，但**必须是 `DM40*.BIN`**
    （例如存成 `DM40FW.BIN`；叫 `firmware.bin` 就不会被识别）
 3. **安全弹出 / 卸载该卷**（让电脑把缓存写完）
    ```powershell
    # 假设表是 E: 盘
-   Copy-Item firmware\opendm40-v0.4.0-zh.bin E:\DM40FW.BIN
+   Copy-Item firmware\opendm40-v0.4.1-zh.bin E:\DM40FW.BIN
    Write-VolumeCache -DriveLetter E
    mountvol E: /P
    ```
@@ -286,13 +306,13 @@ pip install pyvisa pyvisa-py pyusb libusb-package
 ### 3. 刷入
 
 ```bash
-python tools/upload_zh.py firmware/opendm40-v0.4.0-zh.bin --update --wait 120
+python tools/upload_zh.py firmware/opendm40-v0.4.1-zh.bin --update --wait 120
 ```
 
 它会：
 
 1. `DBG:UPLOAD:BEGIN <len>,<crc32>`
-2. 分块 `DBG:UPLOAD:DATA <offset>,<232 字节>` 传 632 KB，约 9 秒
+2. 分块 `DBG:UPLOAD:DATA <offset>,<232 字节>` 传 634 KB，约 9 秒
 3. `DBG:UPLOAD:END?` —— **表自己重新读取文件并校验 CRC-32**
 4. `DBG:UPDATE` —— 清零加载器标记并复位，原厂加载器安装固件
 ### 4. 验证
@@ -320,6 +340,9 @@ python tools/shot.py out.png
 用同样的工具，换镜像即可：
 
 ```bash
+# 回上一版汉化（v0.4.0）
+python tools/upload_zh.py firmware/opendm40-v0.4.0-zh.bin --update --wait 120
+
 # 回官方英文版
 python tools/upload_zh.py firmware/opendm40-v0.3.0-official.bin --update --wait 120
 
