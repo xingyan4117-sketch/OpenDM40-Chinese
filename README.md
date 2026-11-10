@@ -45,10 +45,10 @@
 
 ## 要刷的文件
 
-> **下载**：直接取仓库里的
-> [firmware/opendm40-v0.4.1-zh.bin](firmware/opendm40-v0.4.1-zh.bin)。
-> [Releases](https://github.com/xingyan4117-sketch/OpenDM40-Chinese/releases) 里的附件
-> 目前还是上一版 `v0.4.0-zh10`（即 `opendm40-v0.4.0-zh.bin`）。
+> **直接下载（推荐）**：[Releases · v0.4.1-zh11](
+> https://github.com/xingyan4117-sketch/OpenDM40-Chinese/releases/latest)
+> —— 附件里就是 `opendm40-v0.4.1-zh.bin` 和 `SHA256SUMS.txt`。
+> 也可以直接从仓库取 [firmware/opendm40-v0.4.1-zh.bin](firmware/opendm40-v0.4.1-zh.bin)。
 
 **`firmware/opendm40-v0.4.1-zh.bin`** —— 634,240 字节，
 CRC-32 `09785939`，SHA-256 `455e0a4a…e8974ed7`
