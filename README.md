@@ -17,7 +17,7 @@
 - [汉化范围](#汉化范围)
 - [已知问题](#已知问题)
 - [刷机（推荐：直接复制文件）](#刷机推荐直接复制文件)
-- [刷机（备用：USB SCPI 脚本）](#刷机备用usbscpi脚本)
+- [刷机（备用：USB SCPI 脚本）](#刷机备用usb-scpi-脚本)
 - [回退](#回退)
 - [从源码重建](#从源码重建)
 - [字形是怎么来的](#字形是怎么来的)
@@ -38,7 +38,7 @@
 
 ## 要刷的文件
 
-> **直接下载（推荐）**：[Releases · v0.4.0-zh9](
+> **直接下载（推荐）**：[Releases · v0.4.0-zh10](
 > https://github.com/xingyan4117-sketch/OpenDM40-Chinese/releases/latest)
 > —— 附件里就是 `opendm40-v0.4.0-zh.bin` 和 `SHA256SUMS.txt`
 
@@ -68,7 +68,7 @@ CRC-32 `fd8d01b6`，SHA-256 `b2ce5084…b763`
 > 从 zh3 起，**发布过的附件不再覆盖**；有新改动就发新 tag。
 
 
-其余两个镜像**不要刷**（原版英文、原厂备份），
+其余三个镜像**不要刷**（v0.3.0 存档、原版英文、原厂备份），
 详见 [刷机](#刷机推荐直接复制文件) 一节。
 
 ## 效果
@@ -120,7 +120,7 @@ CRC-32 `fd8d01b6`，SHA-256 `b2ce5084…b763`
 
 - **主菜单**全部 6 项：图库 截图记录 / 万用表 / 示波器 / 信号源 / 设置 /
   组合视图 万用表+示波器
-- **设置页**（单页滚动，25 项）：全部行标签 + 选项值
+- **设置页**（单页滚动，24 项）：全部行标签 + 选项值
   （暗屏时间 5分 / 电源方式 自动 (按视图) / 显示行 柱状图 / U盘 只读 …）
 - **量程页**：电压设置 / 电流设置 / 电阻设置 / **电容设置** / **二极管** /
   **频率/温度** / **功率设置**，自动+ 更安全：不降到 mV / 保持限值 / 波形 /
@@ -171,7 +171,7 @@ CRC-32 `fd8d01b6`，SHA-256 `b2ce5084…b763`
 | **14 px 字体的英文** | 功率计接线图 `SOURCE`/`LOAD`、涌流右栏 `IDLE`/`FILE`、BMP 详情行、触摸校准公式——14 px 字体**没有任何汉字字形**，要改必须先改布局 |
 | **状态栏缩写** | `AC?` `HOLD` `REL` `REC` `HV` 混在一个 83 px 槽里，单改报警会不协调，保留 |
 | **示波器 20 个测量缩写** | `Vp-p` `Vrms` `Freq` … 格子只有 55 px，中文放不下 |
-| **刷机后偶发不重新枚举 USB** | 拔插一次即可恢复；`DBG:BOOT?` 始终是 `NONE`，不是固件复位 |
+| **刷机后偶发不重新枚举 USB** | 拔插一次即可恢复；**不是固件复位**——表仍在运行，`DBG:BOOT?` 的加载器标记有效、崩溃计数为 0 |
 | **闪存余量见底** | B 区剩 4,112 字节、C 区 3,524 字节。再加中文前要先腾空间（A2 区还有 3,496 字节空闲，零等待） |
 | **未实机验证** | 功率计接线弹窗、关机确认弹窗、8 条报警提示、U 盘重插刷新——代码已改，但这几种状态不好复现 |
 
@@ -185,14 +185,15 @@ CRC-32 `fd8d01b6`，SHA-256 `b2ce5084…b763`
 ### 刷哪一个文件？
 
 > ## 就刷：`firmware/opendm40-v0.4.0-zh.bin`
-> **632576 字节**，CRC-32 `12200498`，SHA-256 开头 `34a03183`
+> **632576 字节**，CRC-32 `fd8d01b6`，SHA-256 开头 `b2ce5084`
 
-仓库里一共 4 个镜像，**其余三个都不要刷**：
+仓库里一共 4 个固件镜像（外加一个构建用的链接脚本），**只刷第一个**：
 
 | 文件 | 是什么 | 刷吗 |
 |---|---|---|
 | **`firmware/opendm40-v0.4.0-zh.bin`** | **汉化版（本项目的成品）** | ✅ **刷这个** |
-| `firmware/opendm40-v0.4.0-official.bin` | 上游 opendm40 原版，**英文界面** | ❌ 只有想回退英文版才用 |
+| `firmware/opendm40-v0.3.0-zh.bin` | 旧的 v0.3.0 汉化版（仅存档） | ❌ 只有想回退旧版才用 |
+| `firmware/opendm40-v0.3.0-official.bin` | 上游 opendm40 v0.3.0 原版，**英文界面** | ❌ 只有想回退英文版才用 |
 | `firmware/dm40_v_2_6-stock.bin` | **原厂 V2.6** 固件备份 | ❌ 只有想刷回出厂才用 |
 | `firmware/link-native.x` | 链接脚本，不是固件 | ❌ 不能刷 |
 
@@ -291,7 +292,7 @@ python tools/upload_zh.py firmware/opendm40-v0.4.0-zh.bin --update --wait 120
 它会：
 
 1. `DBG:UPLOAD:BEGIN <len>,<crc32>`
-2. 分块 `DBG:UPLOAD:DATA <offset>,<232 字节>` 传 634 KB，约 9 秒
+2. 分块 `DBG:UPLOAD:DATA <offset>,<232 字节>` 传 632 KB，约 9 秒
 3. `DBG:UPLOAD:END?` —— **表自己重新读取文件并校验 CRC-32**
 4. `DBG:UPDATE` —— 清零加载器标记并复位，原厂加载器安装固件
 ### 4. 验证
@@ -300,7 +301,9 @@ python tools/upload_zh.py firmware/opendm40-v0.4.0-zh.bin --update --wait 120
 python tools/dm.py --query 'DBG:BOOT?'
 ```
 
-返回的加载器标记应与镜像头部一致（本项目为 `0xA0F25F0D 0x0009ADF4 0x000109A2`）。
+返回的加载器标记应与镜像头部一致（三个字由加载器在安装时写入；`NONE` 表示拿不到启动信息）。
+长度字可以直接核对：**它等于镜像字节数 − 12**——本机实测 634,240 字节的镜像对应
+`0x0009AD74`，所以 zh10 的 632,576 字节应为 `0x0009A6F4`。
 
 也可以插上 USB，检查 `INFO/FIRMWARE.BIN` 的 SHA-256 是否等于所刷镜像。
 
@@ -318,7 +321,7 @@ python tools/shot.py out.png
 
 ```bash
 # 回官方英文版
-python tools/upload_zh.py firmware/opendm40-v0.4.0-official.bin --update --wait 120
+python tools/upload_zh.py firmware/opendm40-v0.3.0-official.bin --update --wait 120
 
 # 回正点原子原厂固件（有中文界面）
 python tools/upload_zh.py firmware/dm40_v_2_6-stock.bin --update --wait 120
@@ -339,11 +342,20 @@ python tools/upload_zh.py firmware/dm40_v_2_6-stock.bin --update --wait 120
 Windows 上的几个坑（`RUSTUP_HOME` 要用 Windows 路径、`PATH` 要用 MSYS 路径、
 `stackdepth.py` 缺 `.exe` 后缀）见 `docs/刷机与构建记录.md`。
 
+**两条线做法不同，别混用：**
+
+| 版本 | 做法 | 脚本 |
+|---|---|---|
+| v0.3.0（zh1 – zh8）| 文本锚点替换：一个改动一个补丁，按编号顺序跑 | 全部在 `patch/`：`mkpatch2.py` ~ `mkpatch35_cross.py` |
+| v0.4.0（zh9、zh10）| 上游改了约 5,000 行，锚点全废；改用「147 条文案对照 + 逐条翻译」 | **未随仓库发布**，见 [patch/README.md](patch/README.md) 末节 |
+
+所以本仓库**不能一键重建 zh10**（补丁脚本留在上游开发环境里）。能照下面重建的是
+v0.3.0 线；zh10 每一处改动见 [CHANGELOG.md](CHANGELOG.md)。
+
 ```bash
-git clone --depth 1 --branch v0.4.0 https://github.com/opendm40/opendm40.git
+git clone --depth 1 --branch v0.3.0 https://github.com/opendm40/opendm40.git
 cd opendm40
-python3 ../patch/mkpatch2.py firmware/src ...
-# …… 按上表顺序应用 mkpatch4 ~ mkpatch8
+python3 ../patch/mkpatch2.py firmware/src ...     # 按编号 2 → 35 顺序，不能跳
 python3 ../patch/derive_sets.py <vendor-cjk-set> firmware/src/*.rs
 python3 ../patch/rebuild_fonts.py --pristine ... --out firmware/src/stockfont_data.rs ...
 firmware/build.sh
@@ -385,13 +397,13 @@ firmware/build.sh
 
 ## 截图索引
 
-`screenshots/` 下 29 张实机截图，都是这台机器上拍的（480×320 原始分辨率）。
+`screenshots/` 下 30 张实机截图，都是这台机器上拍的（480×320 原始分辨率）。
 
 **主界面**
 主菜单 · 测量页 · 量程页 · 限值页 · 信号源
 
 **示波器（v0.4.0 全汉化）**
-示波器 · 示波器-测量页 · 示波器-显示页 · 示波器-触发页 · 示波器-解码页
+示波器 · 示波器-测量页 · 示波器-显示页 · 示波器-触发页 · 示波器-解码页 · 示波器-设置页
 
 **设置**
 设置页 · 设置页-采样率
@@ -420,8 +432,8 @@ firmware/build.sh
 
 - **代码**：沿用上游 opendm40 的 **MIT**，见 [LICENSE](LICENSE)
 - **上游项目**：[opendm40/opendm40](https://github.com/opendm40/opendm40)，MIT
-- **中文字形**：64 个来自正点原子 DM40 V2.6 原厂固件的位图字体；
-  69 个由宋体（SimSun）渲染得到
+- **中文字形**：104 个来自正点原子 DM40 V2.6 原厂固件的位图字体；
+  297 个由宋体（SimSun）渲染补齐（共 401 个，见上文「字形是怎么来的」）
 - `firmware/dm40_v_2_6-stock.bin` 是**正点原子官方固件，版权归其所有**，
   仅为方便回退而附带
 - 本项目与正点原子（Alientek）无关，未获其授权或认可
