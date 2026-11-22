@@ -38,6 +38,7 @@
 |---|---|
 | **[中文使用说明书](docs/opendm40-中文使用说明书.md)** | 全部按键、手势、每一页怎么用、安全告警、已知限制，约 8 万字节 |
 | [更新记录](CHANGELOG.md) | 按日期列出所有改动 |
+| [固件源码（zh12）](source/opendm40-v0.4.1-zh12/README.md) | v0.4.1/zh12 完整源码、构建脚本与字体工具（MIT）|
 | [firmware/说明.md](firmware/说明.md) | 四份镜像分别是什么、该刷哪个 |
 | [刷机与构建记录](docs/刷机与构建记录.md) | 怎么从源码重建 |
 | [开发记录](docs/开发记录.md) | 设计取舍、走过的弯路、验证方法（给想改代码的人）|
@@ -363,19 +364,27 @@ python tools/upload_zh.py firmware/dm40_v_2_6-stock.bin --update --wait 120
 
 ## 从源码重建
 
-需要 Rust 工具链（`thumbv7em-none-eabihf` + `llvm-tools`）与 git-bash。
-Windows 上的几个坑（`RUSTUP_HOME` 要用 Windows 路径、`PATH` 要用 MSYS 路径、
-`stackdepth.py` 缺 `.exe` 后缀）见 `docs/刷机与构建记录.md`。
+**v0.4.1 / zh12（当前版本）的完整源码已随仓库发布**：
+[`source/opendm40-v0.4.1-zh12/`](source/opendm40-v0.4.1-zh12/README.md)（MIT）。
 
-**两条线做法不同，别混用：**
+```bash
+cd source/opendm40-v0.4.1-zh12
+./build-zh12.sh
+```
 
-| 版本 | 做法 | 脚本 |
+需要 Rust（`thumbv7em-none-eabihf` + `llvm-tools` + `rust-src`）、Python 3 和
+bash / git-bash；首次构建需要网络让 Cargo 取依赖。产物是
+`firmware/dm40_opendm40_v0.4.1.bin`。仓库里的 zh12 镜像就是这份源码构建的，
+全新构建结果与 Release 附件**逐字节相同**（CRC `bd941428`）。环境细节、字体
+重建和目录说明见源码目录的 [README](source/opendm40-v0.4.1-zh12/README.md)。
+
+| 版本 | 源码 | 说明 |
 |---|---|---|
-| v0.3.0（zh1 – zh8）| 文本锚点替换：一个改动一个补丁，按编号顺序跑 | 全部在 `patch/`：`mkpatch2.py` ~ `mkpatch35_cross.py` |
-| v0.4.0（zh9、zh10）| 上游改了约 5,000 行，锚点全废；改用「147 条文案对照 + 逐条翻译」 | **未随仓库发布**，见 [patch/README.md](patch/README.md) 末节 |
+| v0.4.1（zh11/zh12）| `source/opendm40-v0.4.1-zh12/` | 完整源码，直接构建 |
+| v0.3.0（zh1–zh8）| `patch/` 的文本锚点脚本 | 按编号 2 → 35 顺序跑，见下 |
+| v0.4.0（zh9/zh10）| 旧线，未单独发布源码 | 改动见 [CHANGELOG.md](CHANGELOG.md) |
 
-所以本仓库**不能一键重建 zh10**（补丁脚本留在上游开发环境里）。能照下面重建的是
-v0.3.0 线；zh10 每一处改动见 [CHANGELOG.md](CHANGELOG.md)。
+v0.3.0 的历史重建方式：
 
 ```bash
 git clone --depth 1 --branch v0.3.0 https://github.com/opendm40/opendm40.git
