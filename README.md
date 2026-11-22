@@ -45,16 +45,17 @@
 
 ## 要刷的文件
 
-> **直接下载（推荐）**：[Releases · v0.4.1-zh11](
+> **直接下载（推荐）**：[Releases · v0.4.1-zh12](
 > https://github.com/xingyan4117-sketch/OpenDM40-Chinese/releases/latest)
 > —— 附件里就是 `opendm40-v0.4.1-zh.bin` 和 `SHA256SUMS.txt`。
 > 也可以直接从仓库取 [firmware/opendm40-v0.4.1-zh.bin](firmware/opendm40-v0.4.1-zh.bin)。
 
 **`firmware/opendm40-v0.4.1-zh.bin`** —— 634,240 字节，
-CRC-32 `09785939`，SHA-256 `455e0a4a…e8974ed7`
+CRC-32 `bd941428`，SHA-256 `c1a54fc8…4819f87eb`
 
-想回退上一版就刷 `firmware/opendm40-v0.4.0-zh.bin` —— 632,576 字节，
-CRC-32 `fd8d01b6`，SHA-256 `b2ce5084…b763`。
+想回退到 v0.4.0 稳定版就刷 `firmware/opendm40-v0.4.0-zh.bin` —— 632,576 字节，
+CRC-32 `fd8d01b6`，SHA-256 `b2ce5084…b763`；要回 zh11 则从 Release `v0.4.1-zh11`
+下载当时附件。
 
 校验：`sha256sum -c SHA256SUMS.txt`（Windows 用 `Get-FileHash` 逐个比对），
 完整清单见仓库根的 `SHA256SUMS.txt`。
@@ -75,7 +76,8 @@ CRC-32 `fd8d01b6`，SHA-256 `b2ce5084…b763`。
 | zh8 | `6803c2d3` | v0.3.0 汉化最终版 |
 | zh9 | `12200498` | 移植到上游 v0.4.0（四通道示波器、协议解码器）|
 | zh10 | `fd8d01b6` | v0.4.0 最终版：示波器五页全汉化、弹窗满宽、触发页两行布局 |
-| **zh11** | `09785939` | **当前版本**：移植到上游 v0.4.1（六标签设置、9 档关机、暗屏方式、图库多选批量删除）|
+| zh11 | `09785939` | 上一版：移植到上游 v0.4.1（六标签设置、9 档关机、暗屏方式、图库多选批量删除）|
+| **zh12** | `bd941428` | **当前版本**：速率 chip / 状态栏告警徽标改英文，红色告警弹窗中文（基于 zh11）|
 
 > 从 zh3 起，**发布过的附件不再覆盖**；有新改动就发新 tag。
 
